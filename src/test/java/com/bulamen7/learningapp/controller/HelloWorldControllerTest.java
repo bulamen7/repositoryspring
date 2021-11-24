@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 class HelloWorldControllerTest {
     @Autowired
-    HelloWorldController helloWorldController;
+    UserController helloWorldController;
 
     @Test
     void shouldCheckAnswer() throws Exception {
