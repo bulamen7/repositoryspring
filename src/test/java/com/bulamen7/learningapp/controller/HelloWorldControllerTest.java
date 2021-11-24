@@ -33,6 +33,7 @@ class HelloWorldControllerTest {
     private UserRepository userRepository;
     @Test
     void getMappingShouldReturnStatus200() throws Exception {
+
         this.mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk());
     }
 
