@@ -25,11 +25,9 @@ public class LearningappApplication {
 
         System.out.println(userService.findAll());
         userService.deleteUserById(1);
-        System.out.println(userService.findAll());
         userService.deleteUserById(4);
 
-        System.out.println(userService.findAll());
-
+        System.out.println(userService.getDb().values());
 
     }
 

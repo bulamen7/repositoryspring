@@ -3,6 +3,8 @@ package com.bulamen7.learningapp.controller;
 
 import com.bulamen7.learningapp.model.User;
 import com.bulamen7.learningapp.repository.UserRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 public class UserController {
@@ -21,26 +25,29 @@ public class UserController {
     }
 
     @GetMapping("/hello-world/{name}")
-    public String helloWorld(@PathVariable String name) {
-        return "Hello " + name;
+    public ResponseEntity<String> helloWorld(@PathVariable String name) {
+        return  status(HttpStatus.OK).body("Hello " + name);
     }
 
     @PostMapping("/")
-    public void createStudent(@RequestBody User user) {
+    public ResponseEntity<Void> createStudent(@RequestBody User user) {
         userService.saveUser(user);
+       return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/")
-    public List<User> findAllUsers() {
-        return userService.findAll();
+    public ResponseEntity<List<User>> findAllUsers() {
+        return status(HttpStatus.OK).body(userService.findAll());
     }
+
     @GetMapping("/{id}")
-    public User findUserById(@PathVariable int id) {
-        return userService.findById(id);
+    public ResponseEntity<User> findUserById(@PathVariable int id) {
+        return status(HttpStatus.OK).body(userService.findById(id));
     }
 
     @DeleteMapping("/{id}")
-    public void removeUser(@PathVariable int id) {
+    public ResponseEntity<Void> removeUser(@PathVariable int id) {
         userService.deleteUserById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
