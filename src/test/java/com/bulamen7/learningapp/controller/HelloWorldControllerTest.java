@@ -41,7 +41,12 @@ class HelloWorldControllerTest {
 
     @Test
     void getMappingShouldReturnStatus200() throws Exception {
+<<<<<<< HEAD
         mockMvc.perform(get("/users/")).andDo(print()).andExpect(status().isOk());
+=======
+
+        this.mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk());
+>>>>>>> c9ad6dcaf20feecb753d195c2048ceab3859cc51
     }
 
     @Test
