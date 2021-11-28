@@ -4,6 +4,8 @@ package com.bulamen7.learningapp.model;
 import org.hibernate.validator.constraints.pl.PESEL;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,15 +20,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @Pattern(regexp = "^[a-zA-Z0-9]", message = "length must be 3")
     private String login;
+    @Pattern(regexp = "^[a-zA-Z0-9]", message = "length must be 3")
     private String password;
-    @Pattern(regexp = "^[A-Za-z]\\w{3,10}$")
+    @Pattern(regexp = "^[A-Za-z]\\w{3,10}$", message = "min lenght 3, max 10")
     private String name;
-    @Pattern(regexp = "^[A-Za-z]\\w{3,15}$")
+    @Pattern(regexp = "^[A-Za-z]\\w{3,15}$", message = "min lenght 3, max 15")
     private String lastName;
-
     @PESEL
     private String personalNumber;
+    @Enumerated(EnumType.ORDINAL)
     private UserType type;
 
     public User(int id, String name, String lastName, String personalNumber, UserType type) {
@@ -38,6 +42,26 @@ public class User {
     }
 
     public User() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getPersonalNumber() {
+        return personalNumber;
+    }
+
+    public UserType getType() {
+        return type;
     }
 
     @Override
@@ -61,25 +85,5 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(login, password, name, lastName, personalNumber);
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getPersonalNumber() {
-        return personalNumber;
-    }
-
-    public UserType getType() {
-        return type;
     }
 }

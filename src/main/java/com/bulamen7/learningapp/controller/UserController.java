@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.ResponseEntity.status;
@@ -28,13 +29,13 @@ public class UserController {
 
     @GetMapping("/hello-world/{name}")
     public ResponseEntity<String> helloWorld(@PathVariable String name) {
-        return  status(HttpStatus.OK).body("Hello " + name);
+        return status(HttpStatus.OK).body("Hello " + name);
     }
 
     @PostMapping("/")
-    public ResponseEntity<User> createStudent(@RequestBody User user) {
+    public ResponseEntity<User> createStudent(@RequestBody @Valid User user) {
         userRepository.saveUser(user);
-       return new ResponseEntity<User>(user,HttpStatus.CREATED);
+        return new ResponseEntity<User>(user, HttpStatus.CREATED);
     }
 
     @GetMapping("/")

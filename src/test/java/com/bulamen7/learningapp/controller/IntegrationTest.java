@@ -25,7 +25,7 @@ public class IntegrationTest {
     UserRepository userRepository;
 
     @Test
-    void shouldAllReturnUsers() {
+    void shouldReturnAllUsers() {
         //given
         User user = new User(1, "Dominika", "Sw", "51521521521", UserType.LECTURER);
         userRepository.saveUser(user);
