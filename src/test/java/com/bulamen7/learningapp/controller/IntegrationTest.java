@@ -2,7 +2,7 @@ package com.bulamen7.learningapp.controller;
 
 import com.bulamen7.learningapp.model.User;
 import com.bulamen7.learningapp.model.UserType;
-import com.bulamen7.learningapp.repository.UserRepository;
+import com.bulamen7.learningapp.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,17 +22,43 @@ public class IntegrationTest {
     @Autowired
     private TestRestTemplate testRestTemplate;
     @Autowired
-    UserRepository userRepository;
+    private UserService userService;
 
     @Test
     void shouldReturnAllUsers() {
         //given
-        User user = new User(1, "Dominika", "Sw", "51521521521", UserType.LECTURER);
-        userRepository.saveUser(user);
+        User user = new User(1,"Dominika", "Swiokl", "51521521521", UserType.LECTURER);
+        userService.saveUser(user);
         //when
-        ResponseEntity<User[]> result = testRestTemplate.getForEntity("http://localhost:" + port + "/users/", User[].class);
+        ResponseEntity<User[]> result = testRestTemplate.getForEntity("http://localhost:" + port + "/user/", User[].class);
         //then
         assertEquals(result.getStatusCodeValue(), 200);
         assertThat(result.getBody()).containsExactly(user);
     }
+
+//    @Test
+//    void shouldReturnUserById() {
+//        //given
+//        User user = new User("Edek", "Swiokl", "51521521521", UserType.LECTURER);
+//        userService.saveUser(user);
+//        //when
+//        ResponseEntity<User> result = testRestTemplate.getForEntity("http://localhost:" + port + "/user/", User.class);
+//        //then
+//        assertEquals(result.getStatusCodeValue(), 200);
+//        assertThat(result.getBody()).isEqualTo(user);
+//    }
+//
+//    @Test
+//    void shouldCreateUser() throws URISyntaxException {
+//        //given
+//        User user = new User("Henryk", "Swiokl", "51521521521", UserType.LECTURER);
+//        String baseUrl = "http://localhost:" + port + "/user/";
+//        userService.saveUser(user);
+//        HttpEntity<User> request = new HttpEntity<>(user);
+//
+//        //when
+//        ResponseEntity<User> result = testRestTemplate.postForEntity(baseUrl , request,User.class);
+//        //then
+//        assertEquals(result.getStatusCodeValue(), 201);
+//    }
 }
