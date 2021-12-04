@@ -9,17 +9,17 @@ import java.util.Objects;
 import java.util.Set;
 
 public class CourseRequestDto {
-        private int id;
-        @Pattern(regexp = "^[a-zA-Z0-9]\\w{3}", message = "length must be atleast 3")
-        private String name;
-        @Pattern(regexp = "^[a-zA-Z0-9]\\w{3}", message = "length must be atleast 3")
-        private String description;
-        private Set<User> users = new HashSet<>();
+    private int id;
+    @Pattern(regexp = "^[A-Za-z]\\w{3,15}$", message = "min lenght 3, max 15")
+    private String name;
+    @Pattern(regexp = "^[A-Za-z]\\w{3,15}$", message = "min lenght 3, max 15")
+    private String description;
+    private Set<User> users = new HashSet<>();
 
     public CourseRequestDto() {
     }
 
-    public CourseRequestDto(@JsonProperty("id") int id, @JsonProperty("name")String name, @JsonProperty("description") String description, @JsonProperty("users") Set<User> users) {
+    public CourseRequestDto(@JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("description") String description, @JsonProperty("users") Set<User> users) {
         this.id = id;
         this.name = name;
         this.description = description;

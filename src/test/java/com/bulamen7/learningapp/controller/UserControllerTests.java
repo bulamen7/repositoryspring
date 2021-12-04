@@ -14,6 +14,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -46,7 +48,7 @@ class UserControllerTests {
 
     @Test
     void getMappingShouldFindAllUsersAndReturnStatus200() throws Exception {
-        when(userService.findAll()).thenReturn(Arrays.asList(user, user2, user3));
+        when(userService.findAll()).thenReturn(List.of(user, user2, user3));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/users/")).
                 andExpect(MockMvcResultMatchers.status().isOk())

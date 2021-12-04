@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Pattern;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -20,9 +19,7 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Pattern(regexp = "^[a-zA-Z0-9]\\w{3}", message = "length must be atleast 3")
     private String name;
-    @Pattern(regexp = "^[a-zA-Z0-9]\\w{3}", message = "length must be atleast 3")
     private String description;
     @ManyToMany(mappedBy = "courses")
     private Set<User> users = new HashSet<>();
