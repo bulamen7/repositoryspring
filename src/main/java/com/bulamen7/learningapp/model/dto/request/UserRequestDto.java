@@ -1,53 +1,42 @@
-package com.bulamen7.learningapp.model;
+package com.bulamen7.learningapp.model.dto.request;
 
-
+import com.bulamen7.learningapp.model.Course;
+import com.bulamen7.learningapp.model.UserType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.Pattern;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-@Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserRequestDto {
     private int id;
+    @Pattern(regexp = "^[a-zA-Z0-9]\\w{3}", message = "length must be atleast 3")
     private String login;
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")
     private String password;
+    @Pattern(regexp = "^[A-Za-z]\\w{3,10}$", message = "min lenght 3, max 10")
     private String name;
+    @Pattern(regexp = "^[A-Za-z]\\w{3,15}$", message = "min lenght 3, max 15")
     private String lastName;
+    @Pattern(regexp = "^[0-9]{2}([02468]1|[13579][012])(0[1-9]|1[0-9]|2[0-9]|3[01])[0-9]{5}$", message = "Wrong PESEL")
     private String personalNumber;
+    @Enumerated(EnumType.ORDINAL)
     private UserType type;
-
-    @ManyToMany(cascade = {CascadeType.MERGE})
-    @JoinTable(
-            name = "users_courses",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "course_id")})
-    @JsonProperty("courses")
     private Set<Course> courses = new HashSet<>();
 
-    public User() {
+    public UserRequestDto() {
     }
 
-    public User(String name, String lastName, String personalNumber, UserType type) {
+    public UserRequestDto(@JsonProperty("name") String name, @JsonProperty("lastName") String lastName, @JsonProperty("personalNumber") String personalNumber, @JsonProperty("type") UserType type) {
         this.name = name;
         this.lastName = lastName;
         this.personalNumber = personalNumber;
         this.type = type;
     }
 
-    public User subscribeTo(Course course) {
-        courses.add(course);
-        return this;
-    }
 
     public int getId() {
         return id;
@@ -113,14 +102,28 @@ public class User {
         this.courses = courses;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserRequestDto that = (UserRequestDto) o;
+        return id == that.id && Objects.equals(login, that.login) && Objects.equals(password, that.password) && Objects.equals(name, that.name) && Objects.equals(lastName, that.lastName) && Objects.equals(personalNumber, that.personalNumber) && type == that.type && Objects.equals(courses, that.courses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, login, password, name, lastName, personalNumber, type, courses);
+    }
+
+    @Override
     public String toString() {
-        return "User{" +
+        return "UserRequestDto{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", personalNumber='" + personalNumber + '\'' +
                 ", type=" + type +
+                ", courses=" + courses +
                 '}';
     }
-
 }

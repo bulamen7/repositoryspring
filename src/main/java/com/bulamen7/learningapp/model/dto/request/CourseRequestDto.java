@@ -1,37 +1,26 @@
-package com.bulamen7.learningapp.model;
+package com.bulamen7.learningapp.model.dto.request;
 
-
+import com.bulamen7.learningapp.model.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@Entity
-@Table(name = "courses")
-public class Course {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Pattern(regexp = "^[a-zA-Z0-9]\\w{3}", message = "length must be atleast 3")
-    private String name;
-    @Pattern(regexp = "^[a-zA-Z0-9]\\w{3}", message = "length must be atleast 3")
-    private String description;
-    @ManyToMany(mappedBy = "courses")
-    private Set<User> users = new HashSet<>();
+public class CourseRequestDto {
+        private int id;
+        @Pattern(regexp = "^[a-zA-Z0-9]\\w{3}", message = "length must be atleast 3")
+        private String name;
+        @Pattern(regexp = "^[a-zA-Z0-9]\\w{3}", message = "length must be atleast 3")
+        private String description;
+        private Set<User> users = new HashSet<>();
 
-
-    public Course() {
+    public CourseRequestDto() {
     }
 
-    public Course(@JsonProperty("name")String name, @JsonProperty("description")String description, @JsonProperty("users")Set<User> users) {
+    public CourseRequestDto(@JsonProperty("id") int id, @JsonProperty("name")String name, @JsonProperty("description") String description, @JsonProperty("users") Set<User> users) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.users = users;
@@ -73,8 +62,8 @@ public class Course {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Course course = (Course) o;
-        return id == course.id && Objects.equals(name, course.name) && Objects.equals(description, course.description) && Objects.equals(users, course.users);
+        CourseRequestDto that = (CourseRequestDto) o;
+        return id == that.id && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(users, that.users);
     }
 
     @Override
@@ -84,7 +73,7 @@ public class Course {
 
     @Override
     public String toString() {
-        return "Course{" +
+        return "CourseRequestDto{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +

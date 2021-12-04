@@ -3,9 +3,11 @@ package com.bulamen7.learningapp.controller;
 
 import com.bulamen7.learningapp.model.Course;
 import com.bulamen7.learningapp.model.User;
+import com.bulamen7.learningapp.model.dto.response.UserResponseDto;
 import com.bulamen7.learningapp.service.UserService;
 import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,18 +22,12 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
     private UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/hello-world/{name}")
-    public String helloWorld(@PathVariable String name) {
-        return "Hello " + name;
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -42,14 +38,15 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping()
-    public List<User> findAllUsers() {
+    public List<UserResponseDto> findAllUsers() {
         return userService.findAll();
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public User findUserById(@PathVariable int id) throws NotFoundException {
-        return userService.findById(id);
+    ResponseEntity<UserResponseDto> findById(@PathVariable int id) throws NotFoundException {
+        return userService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -67,6 +64,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{id}/courses")
     public void addCoursesToUser(@PathVariable int id, @RequestBody Course course) {
-        userService.addCourseToUser(course,id);
+        userService.subscribeUserToCourse(course, id);
     }
+
 }

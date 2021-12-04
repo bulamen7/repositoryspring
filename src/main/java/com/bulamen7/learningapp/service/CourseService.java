@@ -1,18 +1,23 @@
 package com.bulamen7.learningapp.service;
 
+import com.bulamen7.learningapp.mapper.CourseMapper;
 import com.bulamen7.learningapp.model.Course;
+import com.bulamen7.learningapp.model.dto.response.CourseResponseDto;
 import com.bulamen7.learningapp.repository.CourseRepository;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 public class CourseService {
     private final CourseRepository courseRepository;
+    private final CourseMapper courseMapper;
 
-    public CourseService(CourseRepository courseRepository) {
+    public CourseService(CourseRepository courseRepository, CourseMapper courseMapper) {
         this.courseRepository = courseRepository;
+        this.courseMapper = courseMapper;
     }
 
     @Transactional
@@ -20,10 +25,10 @@ public class CourseService {
         courseRepository.save(course);
     }
 
-    public Course findById(int id) throws NotFoundException {
+    public Optional<CourseResponseDto> findById(int id) throws NotFoundException {
         if (!courseRepository.existsById(id))
             throw new NotFoundException("Course Not Found");
-        return courseRepository.findById(id).map(course -> new Course(course.getId(), course.getName(), course.getDescription(), course.getUser())).get();
+        return courseRepository.findById(id).map(courseMapper::mapCourseToDto);
     }
 
     public void deleteCourseById(int id) {
@@ -31,6 +36,7 @@ public class CourseService {
             courseRepository.deleteById(id);
         } else throw new IllegalArgumentException("Course with given id doesnt exists");
     }
+
 
 
 
