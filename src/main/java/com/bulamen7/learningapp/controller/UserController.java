@@ -2,7 +2,8 @@ package com.bulamen7.learningapp.controller;
 
 
 import com.bulamen7.learningapp.model.Course;
-import com.bulamen7.learningapp.model.User;
+import com.bulamen7.learningapp.model.dto.request.UserRequestDto;
+import com.bulamen7.learningapp.model.dto.response.CourseResponseDto;
 import com.bulamen7.learningapp.model.dto.response.UserResponseDto;
 import com.bulamen7.learningapp.service.UserService;
 import javassist.NotFoundException;
@@ -24,7 +25,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -32,7 +33,7 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    public void createStudent(@RequestBody @Valid User user) {
+    public void createStudent(@RequestBody @Valid UserRequestDto user) {
         userService.saveUser(user);
     }
 
@@ -57,7 +58,7 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}/courses")
-    public Set<Course> getCourses(@PathVariable int id) {
+    public Set<CourseResponseDto> getCourses(@PathVariable int id) {
         return userService.getUserCourses(id);
     }
 

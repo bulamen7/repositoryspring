@@ -1,6 +1,6 @@
 package com.bulamen7.learningapp.controller;
 
-import com.bulamen7.learningapp.model.Course;
+import com.bulamen7.learningapp.model.dto.request.CourseRequestDto;
 import com.bulamen7.learningapp.model.dto.response.CourseResponseDto;
 import com.bulamen7.learningapp.service.CourseService;
 import javassist.NotFoundException;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/courses")
 
 public class CourseController {
-    CourseService courseService;
+    private final CourseService courseService;
 
     public CourseController(CourseService courseService) {
         this.courseService = courseService;
@@ -27,7 +27,7 @@ public class CourseController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    public void createStudent(@RequestBody Course course) {
+    public void createCourse(@RequestBody CourseRequestDto course) {
         courseService.saveCourse(course);
     }
 

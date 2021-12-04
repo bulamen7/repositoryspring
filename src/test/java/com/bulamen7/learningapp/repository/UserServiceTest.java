@@ -57,7 +57,7 @@ class UserServiceTest {
     void shouldSaveUserWhenNotExist() {
 
         //given
-        UserService userService = new UserService(userRepository, mapper);
+        UserService userService = new UserService(userRepository, mapper, courseMapper);
         given(userService.saveUser(Mockito.any(User.class))).willReturn(new User("Marek", "Swiok", "90012703631", UserType.LECTURER));
 
         //when

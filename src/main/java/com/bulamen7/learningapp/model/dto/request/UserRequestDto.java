@@ -27,6 +27,7 @@ public class UserRequestDto {
     private UserType type;
     private Set<Course> courses = new HashSet<>();
 
+
     public UserRequestDto() {
     }
 
