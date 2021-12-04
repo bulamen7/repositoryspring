@@ -56,10 +56,13 @@ public class UserController {
         userService.deleteUserById(id);
     }
 
-    @ResponseStatus(HttpStatus.OK)
+
     @GetMapping("/{id}/courses")
-    public Set<CourseResponseDto> getCourses(@PathVariable int id) {
-        return userService.getUserCourses(id);
+    public ResponseEntity<Set<CourseResponseDto>> getUserCourses(@PathVariable int id) {
+        if (userService.getUserCourses(id).isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(userService.getUserCourses(id));
     }
 
     @ResponseStatus(HttpStatus.CREATED)

@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class StudentManagementSystemApplication  {
+public class StudentManagementSystemApplication {
 //    @Autowired
 //    UserService userService;
 //    @Autowired
@@ -42,4 +42,14 @@ Co powinien zawierac system:
 - API do zwracania wszystkich ocen danego studenta
 - API do przypisywania nauczycieli do kursow oraz zwracajace kursy danego nauczyciela
 
-Zatem system powinien zamodelowac relacje miedzy uzytkownikami a kursami i ocenami. */
+Zatem system powinien zamodelowac relacje miedzy uzytkownikami a kursami i ocenami.
+
+7. Api do
+
+- zapisywania studentow na zajecia
+
+- zwracajace wszystkie przedmioty studenta,
+
+- zwracajace wszystkich studentow przedmiotu
+
+*/

@@ -43,7 +43,6 @@ public class CourseController {
     public void deleteCourseById(@PathVariable int id) {
         courseService.deleteCourseById(id);
     }
-
 }
 
 //POST /courses/{courseId}/students @RequestBody  {userId: 1}
