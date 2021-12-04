@@ -16,7 +16,7 @@ public class CourseMapper {
         return dto;
     }
 
-    public Course mapDtoToCourseRequest(CourseRequestDto courseRequestDto) {
+    public Course mapRequestDtoToCourse(CourseRequestDto courseRequestDto) {
         Course course = new Course();
         course.setId(courseRequestDto.getId());
         course.setName(courseRequestDto.getName());

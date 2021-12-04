@@ -8,15 +8,10 @@ import java.util.Set;
 
 public class UserResponseDto {
     private int id;
-
     private String name;
-
     private String lastName;
-
     private String personalNumber;
-
     private UserType type;
-
     private Set<Course> courses = new HashSet<>();
 
     public int getId() {

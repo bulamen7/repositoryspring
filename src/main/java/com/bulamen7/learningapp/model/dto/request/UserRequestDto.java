@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class UserRequestDto {
     private int id;
-    @Pattern(regexp = "^[a-zA-Z0-9]\\w{3}", message = "length must be atleast 3")
+    @Pattern(regexp = "^[A-Za-z]\\w{3,15}$", message = "min lenght 3, max 15")
     private String login;
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")
     private String password;

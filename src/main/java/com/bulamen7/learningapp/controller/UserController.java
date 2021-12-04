@@ -33,7 +33,7 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    public void createStudent(@RequestBody @Valid UserRequestDto user) {
+    public void createUser(@RequestBody @Valid UserRequestDto user) {
         userService.saveUser(user);
     }
 

@@ -23,7 +23,7 @@ public class CourseService {
 
     @Transactional
     public void saveCourse(CourseRequestDto courseRequestDto) {
-        Course course = courseMapper.mapDtoToCourseRequest(courseRequestDto);
+        Course course = courseMapper.mapRequestDtoToCourse(courseRequestDto);
         courseRepository.save(course);
     }
 

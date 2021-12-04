@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/courses")
 
@@ -27,7 +29,7 @@ public class CourseController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    public void createCourse(@RequestBody CourseRequestDto course) {
+    public void createCourse(@RequestBody @Valid CourseRequestDto course) {
         courseService.saveCourse(course);
     }
 
