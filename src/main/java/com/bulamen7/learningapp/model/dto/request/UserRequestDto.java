@@ -38,6 +38,11 @@ public class UserRequestDto {
         this.type = type;
     }
 
+    public UserRequestDto subscribeTo(Course course) {
+        courses.add(course);
+        return this;
+    }
+
 
     public int getId() {
         return id;

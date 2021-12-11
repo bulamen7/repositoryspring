@@ -29,10 +29,7 @@ public class User {
     private UserType type;
 
     @ManyToMany(cascade = {CascadeType.MERGE})
-    @JoinTable(
-            name = "users_courses",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "course_id")})
+    @JoinTable(name = "users_courses", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "course_id")})
     @JsonProperty("courses")
     private Set<Course> courses = new HashSet<>();
 
@@ -45,6 +42,7 @@ public class User {
         this.personalNumber = personalNumber;
         this.type = type;
     }
+
 
     public User subscribeTo(Course course) {
         courses.add(course);
@@ -116,13 +114,7 @@ public class User {
     }
 
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", personalNumber='" + personalNumber + '\'' +
-                ", type=" + type +
-                '}';
+        return "User{" + "id=" + id + ", name='" + name + '\'' + ", lastName='" + lastName + '\'' + ", personalNumber='" + personalNumber + '\'' + ", type=" + type + '}';
     }
 
 }

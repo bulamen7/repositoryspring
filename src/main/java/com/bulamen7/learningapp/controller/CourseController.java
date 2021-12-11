@@ -1,7 +1,9 @@
 package com.bulamen7.learningapp.controller;
 
+import com.bulamen7.learningapp.model.User;
 import com.bulamen7.learningapp.model.dto.request.CourseRequestDto;
 import com.bulamen7.learningapp.model.dto.response.CourseResponseDto;
+import com.bulamen7.learningapp.model.dto.response.UserResponseDto;
 import com.bulamen7.learningapp.service.CourseService;
 import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -16,12 +18,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/courses")
 
 public class CourseController {
     private final CourseService courseService;
+
 
     public CourseController(CourseService courseService) {
         this.courseService = courseService;
@@ -45,13 +49,29 @@ public class CourseController {
     public void deleteCourseById(@PathVariable int id) {
         courseService.deleteCourseById(id);
     }
+
+    @GetMapping("/{studentId}/courses")
+    public ResponseEntity<Set<CourseResponseDto>> getStudentCourses(@PathVariable int studentId) {
+        return new ResponseEntity<>(courseService.studentCourses(studentId), HttpStatus.OK);
+    }
+
+    @GetMapping("/{courseId}/students")
+    public ResponseEntity<Set<UserResponseDto>> getStudentsSavedOnCourse(@PathVariable int courseId) {
+        return new ResponseEntity<>(courseService.studentsSavedOnCourse(courseId),HttpStatus.OK);
+    }
+
+    @PostMapping("/{courseId}/students")
+    public void saveStudentOnCourse(@RequestBody User user, @PathVariable int courseId) {
+        courseService.subscribeCourseToUser(user, courseId);
+    }
+
 }
+
 
 //POST /courses/{courseId}/students @RequestBody  {userId: 1}
 
 //GET students/{studentId}/courses
 
-//GET courses/{courseId}/students
 
 //POST /courses/{courseId}/students
 //body : {userId: 1}

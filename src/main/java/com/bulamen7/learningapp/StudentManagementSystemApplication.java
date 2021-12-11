@@ -34,11 +34,11 @@ public class StudentManagementSystemApplication {
 //TODO  API do zwracania wszystkich ocen danego studenta
 //TODO  API do przypisywania nauczycieli do kursow oraz zwracajace kursy danego nauczyciela
 
-//TODO atem system powinien zamodelowac relacje miedzy uzytkownikami a kursami i ocenami.
+//TODO   zatem system powinien zamodelowac relacje miedzy uzytkownikami a kursami i ocenami.
 
-//TODO  zapisywania studentow na zajecia
+//TODO API do  zapisywania studentow na zajecia
 
-//TODO  zwracajace wszystkie przedmioty studenta,
+//TODO API do  zwracajace wszystkie przedmioty studenta,
 
-//TODO  zwracajace wszystkich studentow przedmiotu
+//TODO API do  zwracajace wszystkich studentow przedmiotu
 

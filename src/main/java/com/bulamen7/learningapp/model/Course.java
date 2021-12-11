@@ -33,6 +33,10 @@ public class Course {
         this.description = description;
         this.users = users;
     }
+    public Course subscribeTo(User user) {
+        users.add(user);
+        return this;
+    }
 
     public int getId() {
         return id;

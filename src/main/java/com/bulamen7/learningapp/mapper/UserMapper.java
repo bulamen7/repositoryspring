@@ -3,9 +3,9 @@ package com.bulamen7.learningapp.mapper;
 import com.bulamen7.learningapp.model.User;
 import com.bulamen7.learningapp.model.dto.request.UserRequestDto;
 import com.bulamen7.learningapp.model.dto.response.UserResponseDto;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class UserMapper {
     public UserRequestDto mapUserToRequestDto(User user) {
         UserRequestDto dto = new UserRequestDto();
@@ -30,7 +30,6 @@ public class UserMapper {
         dto.setId(user.getId());
         dto.setName(user.getName());
         dto.setLastName(user.getLastName());
-        dto.setPersonalNumber(user.getPersonalNumber());
         dto.setType(user.getType());
         return dto;
     }
@@ -40,7 +39,6 @@ public class UserMapper {
         user.setId(userResponseDto.getId());
         user.setName(userResponseDto.getName());
         user.setLastName(userResponseDto.getLastName());
-        user.setPersonalNumber(userResponseDto.getPersonalNumber());
         user.setType(userResponseDto.getType());
         return user;
     }

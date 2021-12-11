@@ -65,10 +65,20 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserCourses(id));
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/{id}/courses")
     public void addCoursesToUser(@PathVariable int id, @RequestBody Course course) {
         userService.subscribeUserToCourse(course, id);
     }
 
 }
+
+
+
+
+
+
+
+
+
+

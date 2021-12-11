@@ -10,9 +10,18 @@ public class UserResponseDto {
     private int id;
     private String name;
     private String lastName;
-    private String personalNumber;
     private UserType type;
     private Set<Course> courses = new HashSet<>();
+
+    public UserResponseDto() {
+    }
+
+    public UserResponseDto(String name, String lastName, UserType type, Set<Course> courses) {
+        this.name = name;
+        this.lastName = lastName;
+        this.type = type;
+        this.courses = courses;
+    }
 
     public int getId() {
         return id;
@@ -36,14 +45,6 @@ public class UserResponseDto {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getPersonalNumber() {
-        return personalNumber;
-    }
-
-    public void setPersonalNumber(String personalNumber) {
-        this.personalNumber = personalNumber;
     }
 
     public UserType getType() {
