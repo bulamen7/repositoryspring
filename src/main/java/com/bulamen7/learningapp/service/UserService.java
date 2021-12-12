@@ -30,10 +30,10 @@ public class UserService {
     }
 
     @Transactional
-    public UserRequestDto saveUser(UserRequestDto userRequestDto) {
+    public void saveUser(UserRequestDto userRequestDto) {
         User user = userMapper.mapRequestDtoToUser(userRequestDto);
-        User saveUser = userRepository.save(user);
-        return userMapper.mapUserToRequestDto(saveUser);
+        userRepository.save(user);
+
     }
 
     public Optional<UserResponseDto> findById(int id) throws NotFoundException {
@@ -54,6 +54,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+
     public Set<CourseResponseDto> getUserCourses(int id) {
         return userRepository.getById(id).getCourses().stream()
                 .map(courseMapper::mapCourseToResponseDto)
@@ -68,7 +69,6 @@ public class UserService {
             userRepository.save(user);
         } else throw new IllegalStateException("Course doesnt exist");
     }
-
 
 
 }
