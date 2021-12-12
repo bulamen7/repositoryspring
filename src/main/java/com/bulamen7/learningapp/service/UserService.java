@@ -30,35 +30,37 @@ public class UserService {
     @Transactional
     public void saveUser(UserRequestDto userRequestDto) {
         User user = userMapper.mapRequestDtoToUser(userRequestDto);
-        userRepository.save(user);
-    }
-
-    public Optional<UserResponseDto> findById(int id) throws NotFoundException {
-        if (!userRepository.existsById(id))
-            throw new NotFoundException("User Not Found");
-        return userRepository.findById(id).map(userMapper::mapUserToResponseDto);
-    }
-
-    public List<UserResponseDto> findAll() {
-        return userRepository.findAll().stream().map(userMapper::mapUserToResponseDto).collect(Collectors.toList());
-    }
-
-    @Transactional
-    public void deleteUserById(int id) {
-        userRepository.deleteById(id);
-    }
-
-    public Set<CourseResponseDto> getUserCourses(int id) {
-        return userRepository.getById(id).getCourses().stream().map(courseMapper::mapCourseToResponseDto).collect(Collectors.toSet());
-    }
-
-    public void subscribeUserToCourse(Course course, int userId) {
-        User user;
-        if (userRepository.existsById(userId)) {
-            user = userRepository.getById(userId);
-            user.subscribeTo(course);
+        if (!userRepository.existsById(userRequestDto.getId())) {
             userRepository.save(user);
-        } else throw new IllegalStateException("User doesnt exist");
+        } else throw new IllegalStateException("Duplicated User");
     }
 
-}
+        public Optional<UserResponseDto> findById ( int id) throws NotFoundException {
+            if (!userRepository.existsById(id))
+                throw new NotFoundException("User Not Found");
+            return userRepository.findById(id).map(userMapper::mapUserToResponseDto);
+        }
+
+        public List<UserResponseDto> findAll () {
+            return userRepository.findAll().stream().map(userMapper::mapUserToResponseDto).collect(Collectors.toList());
+        }
+
+        @Transactional
+        public void deleteUserById ( int id){
+            userRepository.deleteById(id);
+        }
+
+        public Set<CourseResponseDto> getUserCourses ( int id){
+            return userRepository.getById(id).getCourses().stream().map(courseMapper::mapCourseToResponseDto).collect(Collectors.toSet());
+        }
+
+        public void subscribeUserToCourse (Course course,int userId){
+            User user;
+            if (userRepository.existsById(userId)) {
+                user = userRepository.getById(userId);
+                user.subscribeTo(course);
+                userRepository.save(user);
+            } else throw new IllegalStateException("User doesnt exist");
+        }
+
+    }

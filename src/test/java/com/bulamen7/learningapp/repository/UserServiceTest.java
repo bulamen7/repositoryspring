@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -82,38 +83,16 @@ class UserServiceTest {
         verify(userService).deleteUserById(user.getId());
     }
 
-//    @Test
-//    void shouldThrowExceptionWhenSavingDuplicatedUser() {
-//        //given
-//        UserService userService = mock(UserService.class);
-//        UserRequestDto user = new UserRequestDto("Marek", "Swiok", "92012703631", UserType.LECTURER);      //when
-//
-//        //then
-//        Assertions.assertThatThrownBy(() -> userService.saveUser(user)).isInstanceOf(IllegalStateException.class).hasMessage("Duplicated User");
-//    }
+  @Test
+  void shouldThrowExceptionWhenSavingDuplicatedUser() {
+      //given
+      UserService userService = mock(UserService.class);
+      UserRequestDto user = new UserRequestDto("Marek", "Swiok", "92012703631", UserType.LECTURER);
+
+      //then
+      doThrow(new IllegalStateException("Duplicated User")).when(userService).saveUser(user);
+  }
 }
-//
-//}
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-
-
 
 
 
