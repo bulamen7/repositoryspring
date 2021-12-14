@@ -2,7 +2,6 @@ package com.bulamen7.learningapp.controller;
 
 import com.bulamen7.learningapp.model.User;
 import com.bulamen7.learningapp.model.UserType;
-import com.bulamen7.learningapp.model.dto.request.UserRequestDto;
 import com.bulamen7.learningapp.repository.UserRepository;
 import com.bulamen7.learningapp.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,10 +34,10 @@ public class IntegrationTest {
     @Test
     void shouldReturnAllUsers() {
         //given
-        UserRequestDto user = new UserRequestDto("Dominika", "Swiokl", "51521521521", UserType.LECTURER);
+        User user = new User("Dominika", "Swiokl", "51521521521", UserType.LECTURER);
         userService.saveUser(user);
         //when
-        ResponseEntity<UserRequestDto[]> result = testRestTemplate.getForEntity("http://localhost:" + port + "/users", UserRequestDto[].class);
+        ResponseEntity<User[]> result = testRestTemplate.getForEntity("http://localhost:" + port + "/users", User[].class);
         //then
         assertEquals(result.getStatusCodeValue(), 200);
         assertThat(result.getBody()).contains(user);
@@ -47,7 +46,7 @@ public class IntegrationTest {
     @Test
     void shouldReturnUserById() {
         //given
-        UserRequestDto user = new UserRequestDto("Edek", "Swiokl", "51521521521", UserType.LECTURER);
+        User user = new User("Edek", "Swiokl", "51521521521", UserType.LECTURER);
         userService.saveUser(user);
         String baseUrl = "http://localhost:" + port + "/users/" + user.getId();
         //when
