@@ -1,7 +1,9 @@
 package com.bulamen7.learningapp.controller;
 
 
+import com.bulamen7.learningapp.mapper.UserMapper;
 import com.bulamen7.learningapp.model.Course;
+import com.bulamen7.learningapp.model.User;
 import com.bulamen7.learningapp.model.dto.request.UserRequestDto;
 import com.bulamen7.learningapp.model.dto.response.CourseResponseDto;
 import com.bulamen7.learningapp.model.dto.response.UserResponseDto;
@@ -21,33 +23,36 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
+    private final UserMapper userMapper;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserMapper userMapper) {
         this.userService = userService;
+        this.userMapper = userMapper;
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    public void createUser(@RequestBody @Valid UserRequestDto user) {
+    public void createUser(@RequestBody @Valid UserRequestDto userRequestDto) {
+        User user = userMapper.mapRequestDtoToUser(userRequestDto);
         userService.saveUser(user);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping()
     public List<UserResponseDto> findAllUsers() {
-        return userService.findAll();
+        return userService.findAll().stream().map(userMapper::mapUserToResponseDto).collect(Collectors.toList());
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    ResponseEntity<UserResponseDto> findById(@PathVariable int id) throws NotFoundException {
-        return userService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public User findById(@PathVariable int id) throws NotFoundException {
+        return userService.findById(id);
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)

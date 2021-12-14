@@ -6,113 +6,93 @@ import com.bulamen7.learningapp.service.UserService;
 import javassist.NotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.BDDMockito.given;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class UserServiceTest {
-    @Autowired
-    UserService userService;
-    @MockBean
-    UserRepository userRepository;
-    User user = new User("Marek", "Swiok", "90012703631", UserType.LECTURER);
-    User user2 = new User("Marek", "Swiok", "90012703631", UserType.LECTURER);
-    User user3 = new User("Arek", "Swiok", "82012703631", UserType.LECTURER);
 
     @Test
     void shouldFindAllUsers() {
         //given
-        given(userRepository.findAll()).willReturn(List.of(user, user2, user3));
-        List<User> users = List.of(user, user2, user3);
-        userService.saveUser(user);
-        userService.saveUser(user2);
-        userService.saveUser(user3);
+        UserService userService = mock(UserService.class);
+
+       User user = new User("Marek", "Swiok", "92012703631", UserType.LECTURER);
+       User user2 = new User("Jarekarek", "Swiok", "92012703631", UserType.LECTURER);
+        List<User> users = List.of(user, user2);
         //when
-
-
+        when(userService.findAll()).thenReturn(List.of(user, user2));
         //then
-        assertEquals(userService.findAll(), users);
+        assertThat(userService.findAll()).isEqualTo(users);
     }
+
+    @Test
+    void shouldFindAllAndNotBeEqual() {
+        //given
+        UserService userService = mock(UserService.class);
+        User user = new User("Marek", "Swiok", "92012703631", UserType.LECTURER);
+        User user2 = new User("Jarekarek", "Swiok", "92012703631", UserType.LECTURER);
+        List<User> users = List.of(user, user2);
+        //when
+        when(userService.findAll()).thenReturn(List.of(user));
+        //then
+        assertThat(userService.findAll()).isNotEqualTo(users);
+    }
+
 
     @Test
     void shouldFindUserById() throws NotFoundException {
         //given
-        //
-        User user = new User("Marek", "Swiok", "90012703631", UserType.LECTURER);
-        userService.saveUser(user);
-        //when
-        User byId = userService.findById(user.getId()).get();
+        UserService userService = mock(UserService.class);
+        User user = new User("Marek", "Swiok", "92012703631", UserType.LECTURER);
+        when(userService.findById(1)).thenReturn(new User( "Marek", "Swiok", "92012703631", UserType.LECTURER));
         //then
-        assertEquals(byId, user);
+        assertThat(userService.findById(1)).isEqualTo(user);
+
     }
 
     @Test
     void shouldSaveUserWhenNotExist() {
 
         //given
-        UserService userService = new UserService(userRepository, mapper, courseMapper);
-        given(userService.saveUser(Mockito.any(User.class))).willReturn(new User("Marek", "Swiok", "90012703631", UserType.LECTURER));
+        UserService userService = mock(UserService.class);
+        User user = new User("Marek", "Swiok", "92012703631", UserType.LECTURER);
 
         //when
-        User user2 = userService.saveUser(new User("Marek", "Swiokasdsadsa", "90012703631", UserType.LECTURER));
+        userService.saveUser(user);
         //then
-        assertEquals(user2.getName(), "Marek");
+        verify(userService).saveUser(user);
     }
 
     @Test
-    void shouldDeleteUserById() {
+    void shouldDeleteUserById() throws RuntimeException {
         //given
-        userRepository.deleteAll();
-        userService.saveUser(user);
-        userService.saveUser(user2);
-        userService.saveUser(user3);
-        //when
-        userService.deleteUserById(1);
+        UserService userService = mock(UserService.class);
+        User user = new User("Marek", "Swiok", "92012703631", UserType.LECTURER);
+        userService.deleteUserById(user.getId());        //when
 
         //then
-        assertEquals(3, userService.findAll().size());
+        verify(userService).deleteUserById(user.getId());
     }
 
-    @Test
-    void shouldThrowExceptionWhenSavingDuplicatedUser() {
-        //given
-        userRepository.deleteAll();
-        userService.saveUser(user);
-        //when
+  @Test
+  void shouldThrowExceptionWhenSavingDuplicatedUser() {
+      //given
+      UserService userService = mock(UserService.class);
+      User user = new User("Marek", "Swiok", "92012703631", UserType.LECTURER);
 
-        //then
-        Assertions.assertThatThrownBy(() -> userService.saveUser(user)).isInstanceOf(IllegalStateException.class).hasMessage("Duplicated User");
-    }
-
-
+      //then
+      doThrow(new IllegalStateException("Duplicated User")).when(userService).saveUser(user);
+      Assertions.assertThatThrownBy(() -> userService.saveUser(user)).isInstanceOf(IllegalStateException.class).hasMessage("Duplicated User");
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
