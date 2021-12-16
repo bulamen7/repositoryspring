@@ -1,6 +1,7 @@
 package com.bulamen7.learningapp.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.CascadeType;
@@ -23,6 +24,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String login;
+    @JsonIgnore
     private String password;
     private String name;
     private String lastName;
@@ -37,6 +39,10 @@ public class User {
     @JsonProperty("courses")
     private Set<Course> courses = new HashSet<>();
 
+    public void subscribeTo(Course course) {
+        courses.add(course);
+    }
+
     public User() {
     }
 
@@ -45,11 +51,6 @@ public class User {
         this.lastName = lastName;
         this.personalNumber = personalNumber;
         this.type = type;
-    }
-
-    public User subscribeTo(Course course) {
-        courses.add(course);
-        return this;
     }
 
     public int getId() {

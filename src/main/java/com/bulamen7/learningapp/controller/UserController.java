@@ -1,6 +1,7 @@
 package com.bulamen7.learningapp.controller;
 
 
+import com.bulamen7.learningapp.mapper.CourseMapper;
 import com.bulamen7.learningapp.mapper.UserMapper;
 import com.bulamen7.learningapp.model.Course;
 import com.bulamen7.learningapp.model.User;
@@ -10,7 +11,6 @@ import com.bulamen7.learningapp.model.dto.response.UserResponseDto;
 import com.bulamen7.learningapp.service.UserService;
 import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,10 +30,12 @@ import java.util.stream.Collectors;
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
+    private final CourseMapper courseMapper;
 
-    public UserController(UserService userService, UserMapper userMapper) {
+    public UserController(UserService userService, UserMapper userMapper, CourseMapper courseMapper) {
         this.userService = userService;
         this.userMapper = userMapper;
+        this.courseMapper = courseMapper;
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -51,8 +53,9 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public User findById(@PathVariable int id) throws NotFoundException {
-        return userService.findById(id);
+    public UserResponseDto findById(@PathVariable int id) throws NotFoundException {
+        User user = userService.findById(id);
+        return userMapper.mapUserToResponseDto(user);
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -62,18 +65,15 @@ public class UserController {
     }
 
 
-    @GetMapping("/{id}/courses")
-    public ResponseEntity<Set<CourseResponseDto>> getUserCourses(@PathVariable int id) {
-        if (userService.getUserCourses(id).isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(userService.getUserCourses(id));
-    }
-
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{id}/courses")
-    public void addCoursesToUser(@PathVariable int id, @RequestBody Course course) {
-        userService.subscribeUserToCourse(course, id);
+    @PostMapping("/{userId}/courses")
+    public void subscribeStudentToCourse(@PathVariable int userId, @RequestBody Course course) throws NotFoundException {
+        userService.subscribeCourseToUser(course, userId);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{userId}/courses")
+    public Set<CourseResponseDto> userCourses(@PathVariable int userId) throws NotFoundException {
+        return userService.getAllCourses(userId);
+    }
 }

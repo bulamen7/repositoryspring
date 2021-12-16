@@ -1,8 +1,7 @@
-package com.bulamen7.learningapp.repository;
+package com.bulamen7.learningapp.service;
 
 import com.bulamen7.learningapp.model.User;
 import com.bulamen7.learningapp.model.UserType;
-import com.bulamen7.learningapp.service.UserService;
 import javassist.NotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
