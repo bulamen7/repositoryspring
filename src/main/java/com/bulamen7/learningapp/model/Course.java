@@ -24,14 +24,17 @@ public class Course {
     @ManyToMany(mappedBy = "courses")
     private Set<User> users = new HashSet<>();
 
+    public void subscribeTo(User user) {
+        users.add(user);
+    }
 
     public Course() {
     }
 
-    public Course(@JsonProperty("name")String name, @JsonProperty("description")String description, @JsonProperty("users")Set<User> users) {
+    public Course(@JsonProperty("name") String name, @JsonProperty("description") String description) {
         this.name = name;
         this.description = description;
-        this.users = users;
+
     }
 
     public int getId() {
