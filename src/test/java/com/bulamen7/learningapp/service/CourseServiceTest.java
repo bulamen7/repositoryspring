@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -28,24 +29,34 @@ class CourseServiceTest {
 
     @Test
     void shouldSaveCourse() {
+        //given
         CourseService courseService = new CourseService(courseRepository, userRepository);
         Course course = new Course("Mockito", "test");
+
+        //when
         when(courseService.saveCourse(any(Course.class))).thenReturn(course);
-
-        Course actualCourse = courseRepository.save(course);
-        assertThat(actualCourse).isEqualTo(course);
-
+        Course expectedCourse = courseRepository.save(course);
+        //then
+        assertThat(expectedCourse).isEqualTo(course);
     }
 
     @Test
     void shouldFindCourseById() throws NotFoundException {
+        //given
         CourseService courseService = new CourseService(courseRepository, userRepository);
         Course course = new Course("Niemiecki", "Jezyk obcy");
+        //when
         when(courseRepository.findById(1)).thenReturn(Optional.of(new Course("Niemiecki", "Jezyk obcy")));
+        Course expectedCourse = courseService.findById(1);
+        //then
+        assertThat(expectedCourse).isEqualTo(course);
+        assertThat(expectedCourse.getName()).isEqualTo(course.getName());
+    }
 
-        Course actualCourse = courseService.findById(1);
-        assertThat(actualCourse).isEqualTo(course);
-        assertThat(actualCourse.getName()).isEqualTo(course.getName());
+    @Test
+    void shouldThrowExceptionWhenCourseDoesntExists() throws NotFoundException {
+        CourseService courseService = new CourseService(courseRepository, userRepository);
+        assertThatThrownBy(() -> courseService.findById(2)).isInstanceOf(NotFoundException.class).hasMessage("Course not found");
     }
 
     @Test
@@ -61,7 +72,7 @@ class CourseServiceTest {
         User user = new User("Arek", "Alkomat", "92012703631", UserType.ADMIN);
         Course course = new Course("kurs", "kursss");
         //when
-        course.subscribeTo(new User("Arek", "Alkomat", "92012703631", UserType.ADMIN));
+        course.subscribeTo(user);
         //then
         assertThat(course.getUsers()).isEqualTo(Set.of(user));
     }
