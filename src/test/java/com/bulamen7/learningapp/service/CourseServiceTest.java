@@ -3,52 +3,56 @@ package com.bulamen7.learningapp.service;
 import com.bulamen7.learningapp.model.Course;
 import com.bulamen7.learningapp.model.User;
 import com.bulamen7.learningapp.model.UserType;
+import com.bulamen7.learningapp.repository.CourseRepository;
+import com.bulamen7.learningapp.repository.UserRepository;
 import javassist.NotFoundException;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class CourseServiceTest {
 
+    @MockBean
+    CourseRepository courseRepository;
+    @MockBean
+    UserRepository userRepository;
+
     @Test
     void shouldSaveCourse() {
-        CourseService courseService = mock(CourseService.class);
-        Course course = new Course("Niemiecki", "Jezyk obcy");
-        courseService.saveCourse(course);
-        verify(courseService).saveCourse(course);
+        CourseService courseService = new CourseService(courseRepository, userRepository);
+        Course course = new Course("Mockito", "test");
+        when(courseService.saveCourse(any(Course.class))).thenReturn(course);
+
+        Course actualCourse = courseRepository.save(course);
+        assertThat(actualCourse).isEqualTo(course);
+
     }
 
     @Test
     void shouldFindCourseById() throws NotFoundException {
-        CourseService courseService = mock(CourseService.class);
+        CourseService courseService = new CourseService(courseRepository, userRepository);
         Course course = new Course("Niemiecki", "Jezyk obcy");
+        when(courseRepository.findById(1)).thenReturn(Optional.of(new Course("Niemiecki", "Jezyk obcy")));
 
-        when(courseService.findById(5)).thenReturn(new Course("Niemiecki", "Jezyk obcy"));
-
-        assertThat(courseService.findById(5)).isEqualTo(course);
+        Course actualCourse = courseService.findById(1);
+        assertThat(actualCourse).isEqualTo(course);
+        assertThat(actualCourse.getName()).isEqualTo(course.getName());
     }
 
     @Test
     void shouldDeleteCourseById() {
-        CourseService courseService = mock(CourseService.class);
-        Course course = new Course("Niemiecki", "Jezyk obcy");
-
-        courseService.deleteCourseById(course.getId());
-
-        verify(courseService).deleteCourseById(course.getId());
-
-        //then
-        doThrow(new IllegalArgumentException("Course with given id doesnt exists")).when(courseService).saveCourse(course);
-        Assertions.assertThatThrownBy(() -> courseService.saveCourse(course)).isInstanceOf(IllegalArgumentException.class).hasMessage("Course with given id doesnt exists");
+        CourseService courseService = new CourseService(courseRepository, userRepository);
+        courseService.deleteCourseById(5);
+        verify(courseRepository).deleteById(any());
     }
 
     @Test
@@ -61,6 +65,7 @@ class CourseServiceTest {
         //then
         assertThat(course.getUsers()).isEqualTo(Set.of(user));
     }
+
 }
 
 

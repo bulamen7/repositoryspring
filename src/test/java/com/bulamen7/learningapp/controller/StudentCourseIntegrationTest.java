@@ -13,8 +13,6 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 
-import java.net.URISyntaxException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -58,23 +56,19 @@ public class IntegrationTest {
         assertEquals(result.getStatusCodeValue(), 200);
         assertThat(result.getBody()).isEqualTo(user);
 
+    }
+
+    @Test
+    void shouldCreateUser() {
+        //given
+        User user = new User("Henryk", "Swiokl", "51521521521", UserType.LECTURER);
+        String baseUrl = "http://localhost:" + port + "/users/";
+        HttpEntity<User> request = new HttpEntity<>(user);
+        //when
+        ResponseEntity<User> result = testRestTemplate.postForEntity(baseUrl, request, User.class);
+        //then
+        assertEquals(result.getStatusCodeValue(), 201);
+    }
+
 }
 
-  @Test
-  void shouldCreateUser() throws URISyntaxException {
-      //given
-      userRepository.deleteAll();
-
-      User user = new User("Henryk", "Swiokl", "51521521521", UserType.LECTURER);
-      String baseUrl = "http://localhost:" + port + "/users/";
-      HttpEntity<User> request = new HttpEntity<>(user);
-
-      //when
-      ResponseEntity<User> result = testRestTemplate.postForEntity(baseUrl, request, User.class);
-      //then
-      assertEquals(result.getStatusCodeValue(), 201);
-  }
-
-   }
-
-//w dto walidacja, model czysty obiekt, testy na walidacje, negatywne scenariusze testow, userservicetest mocki
